@@ -90,6 +90,7 @@ testsEj5 = test [
   puroMadera ~=? comer (Derecha, 1, Inanicion) puroMadera,
   puroMadera ~=? comer (Derecha, 1, Gula) puroMadera,
   puroMadera ~=? comer (Derecha, 1, Hambre) puroMadera,
+  protegidoNivel1Derecha ~=? comer (Derecha, 1, Gula) protegidoNivel1Derecha,
   protegidoNivel1Derecha ~=? comer (Derecha, 1, Hambre) protegidoNivel1Derecha,
   Rama Madera soloUnaHoja maderaSolo ~=? comer (Derecha, 1, Inanicion) protegidoNivel1Derecha,
   Brote Madera ~=? comer (Derecha, 0, Hambre) frutoSinFlor,
@@ -99,12 +100,22 @@ testsEj5 = test [
   Rama Fruto
 		(Rama Fruto (Brote Madera) (Rama Hoja (Brote Madera) (Brote Hoja)))
 		(Rama Fruto (Rama Madera (Brote Hoja) (Brote Madera)) (Rama Fruto (Brote Flor) (Brote Fruto))) ~=? comer (Izquierda, 2, Inanicion) arbol9, 
+  Rama Fruto
+		(Rama Fruto (Rama Fruto (Brote Fruto) (Brote Flor)) (Rama Hoja (Brote Madera) (Brote Hoja)))
+		(Rama Fruto (Rama Madera (Brote Hoja) (Brote Madera)) (Brote Madera)) ~=? comer (Derecha, 2, Inanicion) arbol9, 
   arbol10 ~=? comer (Izquierda, 2, Inanicion) arbol10,
   arbol10 ~=? comer (Derecha, 2, Inanicion) arbol10 
   ]
 
 testsEj6 = test [
-  0 ~=? 0 --Cambiar esto por tests verdaderos.
+  Rama Fruto
+		(Rama Fruto (Brote Madera) (Rama Hoja (Brote Madera) (Brote Hoja)))
+		(Rama Fruto (Rama Madera (Brote Hoja) (Brote Madera)) (Brote Madera)) ~=? alimentar arbol9 [(Izquierda, 2, Inanicion), (Derecha, 2, Inanicion)],
+  arbol9 ~=? alimentar arbol9 [(Izquierda, 2, Hambre), (Derecha, 2, Hambre)],
+  Rama Fruto (Brote Madera) (Brote Madera) ~=? alimentar arbol9 [(Izquierda, 1, Inanicion), (Derecha, 1, Inanicion)],
+  arbol9 ~=? alimentar arbol9 [(Izquierda, 1, Hambre), (Derecha, 1, Hambre)],
+  Brote Madera ~=? alimentar arbol9 [(Izquierda, 0, Inanicion), (Derecha, 0, Inanicion)],
+  arbol9 ~=? alimentar arbol9 [(Izquierda, 0, Hambre), (Derecha, 0, Hambre)]
   ]
 
 testsEj7 = test [
