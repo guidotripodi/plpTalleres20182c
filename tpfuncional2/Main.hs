@@ -18,6 +18,9 @@ arbol8 = Rama Madera arbol1 arbol6
 arbol9 = Rama Fruto
 		(Rama Fruto (Rama Fruto (Brote Fruto) (Brote Flor)) (Rama Hoja (Brote Madera) (Brote Hoja)))
 		(Rama Fruto (Rama Madera (Brote Hoja) (Brote Madera)) (Rama Fruto (Brote Flor) (Brote Fruto)))
+arbol10 = Rama Fruto
+		(Rama Fruto (Rama Hoja (Brote Madera) (Brote Hoja)) (Rama Fruto (Brote Fruto) (Brote Flor)))
+		(Rama Fruto (Rama Fruto (Brote Flor) (Brote Fruto)) (Rama Madera (Brote Hoja) (Brote Madera)))
 
 soloUnaHoja = Brote Hoja
 puroMadera = Rama Madera (Brote Madera) (Brote Madera)
@@ -59,9 +62,10 @@ testsEj2 = test [
   1 ~=? perfume arbol3,
   2 ~=? perfume arbol4,
   3 ~=? perfume tresFlores,
-  False ~=? puedeVivir arbol1,
-  True ~=? puedeVivir arbol2,
-  False ~=? puedeVivir (ultimaPrimavera tresFlores),
+  True ~=? puedeVivir arbol1,
+  True ~=? puedeVivir tresHojas,
+  False ~=? puedeVivir maderaSolo,
+  False ~=? puedeVivir (ultimaPrimavera tresHojas),
   False ~=? mismosComponentes arbol1 arbol3,
   False ~=? mismosComponentes arbol2 arbol6,
   True ~=? mismosComponentes arbol2 arbol3,
@@ -69,17 +73,34 @@ testsEj2 = test [
   ]
 
 testsEj3 = test [
-  puroMadera ~=? masPesado [arbol4, puroMadera, arbol1] --Cambiar esto por tests verdaderos.
+  puroMadera ~=? masPesado [arbol4, puroMadera, arbol1]
   ]
 
 testsEj4 = test [
   arbol3 ~=? crecer (\c -> if c == Flor then Hoja else if c == Hoja then Flor else c) arbol2,
-  tresHojas ~=? ultimaPrimavera tresHojas,
-  tresHojas ~=? ultimaPrimavera tresFlores --Cambiar esto por tests verdaderos.
+  tresFlores ~=? ultimaPrimavera tresHojas,
+  tresFlores ~=? ultimaPrimavera tresFlores
   ]
 
 testsEj5 = test [
-  0 ~=? 0 --Cambiar esto por tests verdaderos.
+  otraFlor ~=? comer (Derecha, 1, Gula) otraFlor,
+  puroMadera ~=? comer (Derecha, 0, Inanicion) puroMadera,
+  puroMadera ~=? comer (Derecha, 0, Gula) puroMadera,
+  puroMadera ~=? comer (Derecha, 0, Hambre) puroMadera,
+  puroMadera ~=? comer (Derecha, 1, Inanicion) puroMadera,
+  puroMadera ~=? comer (Derecha, 1, Gula) puroMadera,
+  puroMadera ~=? comer (Derecha, 1, Hambre) puroMadera,
+  protegidoNivel1Derecha ~=? comer (Derecha, 1, Hambre) protegidoNivel1Derecha,
+  Rama Madera soloUnaHoja maderaSolo ~=? comer (Derecha, 1, Inanicion) protegidoNivel1Derecha,
+  Brote Madera ~=? comer (Derecha, 0, Hambre) frutoSinFlor,
+  Brote Madera ~=? comer (Derecha, 0, Inanicion) frutoSinFlor,
+  Brote Madera ~=? comer (Izquierda, 0, Hambre) frutoSinFlor,
+  Brote Madera ~=? comer (Izquierda, 0, Inanicion) frutoSinFlor,
+  Rama Fruto
+		(Rama Fruto (Brote Madera) (Rama Hoja (Brote Madera) (Brote Hoja)))
+		(Rama Fruto (Rama Madera (Brote Hoja) (Brote Madera)) (Rama Fruto (Brote Flor) (Brote Fruto))) ~=? comer (Izquierda, 2, Inanicion) arbol9, 
+  arbol10 ~=? comer (Izquierda, 2, Inanicion) arbol10,
+  arbol10 ~=? comer (Derecha, 2, Inanicion) arbol10 
   ]
 
 testsEj6 = test [

@@ -1,4 +1,4 @@
-module Arboles (Componente(Madera, Hoja, Fruto, Flor), Arbol(Rama, Brote), Dirección(Izquierda, Derecha), TipoHambre(Gula, Hambre, Inanicion), Animal, foldArbol, peso, perfume, puedeVivir, mismosComponentes, masPesado, componentesPorNivel, dimensiones, ultimaPrimavera, crecer) where
+module Arboles (Componente(Madera, Hoja, Fruto, Flor), Arbol(Rama, Brote), Dirección(Izquierda, Derecha), TipoHambre(Gula, Hambre, Inanicion), Animal, foldArbol, peso, perfume, puedeVivir, mismosComponentes, masPesado, componentesPorNivel, dimensiones, ultimaPrimavera, crecer, comer) where
 
 data Componente = Madera | Hoja | Fruto | Flor deriving (Eq, Show)
 
@@ -71,7 +71,7 @@ ultimaPrimavera a = crecer (\c -> if c == Hoja then Flor else c) a
 
 -- TODO: We cant use explicit recursion: try folding it.
 subArbolP :: Int -> Int -> Dirección -> Arbol -> Arbol
-subArbolP j i d (Rama c a1 a2) = if j == i then Rama c a1 a2 else if d == Izquierda then subArbolP (j+1) i d a1 else subArbolP (j+1)i d a2
+subArbolP j i d (Rama c a1 a2) = if j == i then Rama c a1 a2 else if d == Izquierda then subArbolP (j+1) i d a1 else subArbolP (j+1) i d a2
 subArbolP j i d (Brote c) = Brote c
 
 subArbol :: Int -> Dirección -> Arbol -> Arbol
@@ -79,19 +79,23 @@ subArbol i d a = subArbolP 0 i d a
 
 -- TODO: We cant use explicit recursion: try folding it.
 achicarP :: Int -> Int -> Dirección -> Arbol -> Arbol
-achicarP j i d (Rama c a1 a2) = if i == j then Rama c (Brote Madera) (Brote Madera) else if d == Izquierda then achicarP (j+1) i d a1 else achicarP (j+1) i d a2 
-achicarP j i d (Brote c) = Brote c
+achicarP j i d (Rama c a1 a2) = if i == j then (Brote Madera) else if d == Izquierda then Rama c (achicarP (j+1) i d a1) a2 else Rama c a1 (achicarP (j+1) i d a2) 
+achicarP j i d (Brote c) = Brote Madera
 
 achicar :: Int -> Dirección -> Arbol -> Arbol
 achicar i d a = achicarP 0 i d a
 
+componentePrincipal :: Arbol -> Componente
+componentePrincipal (Rama c a1 a2) = c
+componentePrincipal (Brote c) = c 
+
 -- Ejercicio 5
 comer :: Animal -> Arbol -> Arbol
-comer an ar = if getTh an == Gula then ar
-			  else if getTh an == Hambre then
-			  	      if perfume (subArbol (getAlt an) (getDir an) ar) > 0 then ar else achicar (getAlt an) (getDir an) ar
-			  else achicar (getAlt an) (getDir an) ar
-
+comer an ar = if componentePrincipal (subArbol (getAlt an) (getDir an) ar) /= Fruto then ar
+              else if getTh an == Gula then ar
+              else if (getTh an == Hambre) && (perfume (subArbol (getAlt an) (getDir an) ar) > 0) then ar 
+              else achicar (getAlt an) (getDir an) ar
+			        
 -- Ejercicio 6
 alimentar :: Arbol -> [Animal] -> Arbol
 alimentar ar ls = foldr (\an res -> comer an res) ar ls
