@@ -69,6 +69,7 @@ crecer f a = foldArbol (\c res1 res2 -> Rama (f c) res1 res2) (\c -> Brote (f c)
 ultimaPrimavera :: Arbol -> Arbol
 ultimaPrimavera a = crecer (\c -> if c == Hoja then Flor else c) a 
 
+-- TODO: We cant use explicit recursion: try folding it.
 subArbolP :: Int -> Int -> Dirección -> Arbol -> Arbol
 subArbolP j i d (Rama c a1 a2) = if j == i then Rama c a1 a2 else if d == Izquierda then subArbolP (j+1) i d a1 else subArbolP (j+1)i d a2
 subArbolP j i d (Brote c) = Brote c
@@ -76,6 +77,7 @@ subArbolP j i d (Brote c) = Brote c
 subArbol :: Int -> Dirección -> Arbol -> Arbol
 subArbol i d a = subArbolP 0 i d a
 
+-- TODO: We cant use explicit recursion: try folding it.
 achicarP :: Int -> Int -> Dirección -> Arbol -> Arbol
 achicarP j i d (Rama c a1 a2) = if i == j then Rama c (Brote Madera) (Brote Madera) else if d == Izquierda then achicarP (j+1) i d a1 else achicarP (j+1) i d a2 
 achicarP j i d (Brote c) = Brote c
