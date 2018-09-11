@@ -1,4 +1,4 @@
-module Arboles (Componente(Madera, Hoja, Fruto, Flor), Arbol(Rama, Brote), Dirección(Izquierda, Derecha), TipoHambre(Gula, Hambre, Inanicion), Animal, foldArbol, peso, perfume, puedeVivir, mismosComponentes, masPesado,componentesPorNivel, dimensiones, ultimaPrimavera) where
+module Arboles (Componente(Madera, Hoja, Fruto, Flor), Arbol(Rama, Brote), Dirección(Izquierda, Derecha), TipoHambre(Gula, Hambre, Inanicion), Animal, foldArbol, peso, perfume, puedeVivir, mismosComponentes, masPesado, componentesPorNivel, dimensiones, ultimaPrimavera, crecer) where
 
 data Componente = Madera | Hoja | Fruto | Flor deriving (Eq, Show)
 
@@ -65,8 +65,6 @@ masPesado ls = (foldr1 (\x res -> if (peso x) > (peso res) then x else res) ls)
 
 crecer :: (Componente -> Componente) -> Arbol -> Arbol
 crecer f a = foldArbol (\c res1 res2 -> Rama (f c) res1 res2) (\c -> Brote (f c)) a
-
-
 
 ultimaPrimavera :: Arbol -> Arbol
 ultimaPrimavera a = crecer (\c -> if c == Hoja then Flor else c) a 
