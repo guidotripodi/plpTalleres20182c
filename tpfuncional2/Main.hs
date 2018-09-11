@@ -120,5 +120,11 @@ testsEj7 = test [
   ]
 
 testsEj8 = test [
-	0 ~=? 0 --Cambiar esto por tests verdaderos.
+	1 ~=? componentesPorNivel arbol1 0,
+  2 ~=? componentesPorNivel desbalanceado 1,
+  4 ~=? componentesPorNivel arbol9 2,
+  8 ~=? componentesPorNivel arbol9 3,
+  (1, 1) ~=? dimensiones arbol1,
+  (3, 2) ~=? dimensiones desbalanceado,
+  (4, 8) ~=? dimensiones arbol9
   ]

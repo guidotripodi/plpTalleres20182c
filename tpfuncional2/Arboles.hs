@@ -105,13 +105,13 @@ sobrevivientes :: [Animal] -> [Arbol] -> [Arbol]
 sobrevivientes ans ars = foldr (\ar res -> if (puedeVivir (alimentar ar ans)) == True then ar:res else res) [] ars
 
 componentesPorNivelP :: Arbol -> Int -> Int -> Int
-componentesPorNivelP (Rama c a1 a2) j i = if j == i then 2 else (componentesPorNivelP a1 (j+1) i) + (componentesPorNivelP a2 (j+1) i)
-componentesPorNivelP (Brote c) j i = if j == i then 1 else 0
+componentesPorNivelP (Rama c a1 a2) i j = if j == i then 1 else (componentesPorNivelP a1 i (j+1)) + (componentesPorNivelP a2 i (j+1))
+componentesPorNivelP (Brote c) i j = if j == i then 1 else 0
 
 -- Ejercicio 8a
 componentesPorNivel :: Arbol -> Int -> Int
-componentesPorNivel ar i = componentesPorNivelP ar i 0 
+componentesPorNivel ar i = componentesPorNivelP ar i 0
 
 -- Ejercicio 8b
 dimensiones :: Arbol -> (Int, Int)
-dimensiones ar = foldArbol (\c res1 res2 -> (((max (fst res1) (fst res2)) + 1), max (componentesPorNivel ar ((max (fst res1) (fst res2)) + 1)) (max (snd res1) (snd res2)))) (\c -> (0, 1)) ar
+dimensiones ar = foldArbol (\c res1 res2 -> (((max (fst res1) (fst res2)) + 1), max (componentesPorNivel ar ((max (fst res1) (fst res2)) + 1)) (max (snd res1) (snd res2)))) (\c -> (1, 1)) ar
