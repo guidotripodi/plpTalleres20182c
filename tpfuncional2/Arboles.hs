@@ -69,25 +69,22 @@ crecer f a = foldArbol (\c res1 res2 -> Rama (f c) res1 res2) (\c -> Brote (f c)
 ultimaPrimavera :: Arbol -> Arbol
 ultimaPrimavera a = crecer (\c -> if c == Hoja then Flor else c) a 
 
--- TODO: We cant use explicit recursion: try folding it.
-subArbolP :: Int -> Int -> Dirección -> Arbol -> Arbol
-subArbolP j i d (Rama c a1 a2) = if j == i then Rama c a1 a2 else if d == Izquierda then subArbolP (j+1) i d a1 else subArbolP (j+1) i d a2
-subArbolP j i d (Brote c) = Brote c
-
-subArbol :: Int -> Dirección -> Arbol -> Arbol
-subArbol i d a = subArbolP 0 i d a
-
--- TODO: We cant use explicit recursion: try folding it.
-achicarP :: Int -> Int -> Dirección -> Arbol -> Arbol
-achicarP j i d (Rama c a1 a2) = if i == j then (Brote Madera) else if d == Izquierda then Rama c (achicarP (j+1) i d a1) a2 else Rama c a1 (achicarP (j+1) i d a2) 
-achicarP j i d (Brote c) = Brote Madera
-
-achicar :: Int -> Dirección -> Arbol -> Arbol
-achicar i d a = achicarP 0 i d a
-
 componentePrincipal :: Arbol -> Componente
 componentePrincipal (Rama c a1 a2) = c
 componentePrincipal (Brote c) = c 
+
+foldNat :: (b -> b) -> b -> Int -> b
+foldNat f z 0 = z
+foldNat f z n = f (foldNat f z (n-1))
+
+subArbol :: Int -> Dirección -> Arbol -> Arbol
+-- subArbol 0 d a = a
+-- subArbol i d (Rama c a1 a2) = if d == Izquierda then subArbol (i-1) d a1 else subArbol (i-1) d a2
+subArbol i d a = foldNat (\(Rama c a1 a2) -> if d == Izquierda then a1 else a2) a i 
+
+achicar :: Int -> Dirección -> Arbol -> Arbol
+achicar 0 d a = (Brote Madera)
+achicar i d (Rama c a1 a2) = if d == Izquierda then Rama c (achicar (i-1) d a1) a2 else Rama c a1 (achicar (i-1) d a2) 
 
 -- Ejercicio 5
 comer :: Animal -> Arbol -> Arbol
