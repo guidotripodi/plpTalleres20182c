@@ -1,4 +1,4 @@
-module Arboles (Componente(Madera, Hoja, Fruto, Flor), Arbol(Rama, Brote), Dirección(Izquierda, Derecha), TipoHambre(Gula, Hambre, Inanicion), Animal, foldArbol, peso, perfume, puedeVivir, mismosComponentes, masPesado, componentesPorNivel, dimensiones, ultimaPrimavera, crecer, comer, alimentar) where
+module Arboles (Componente(Madera, Hoja, Fruto, Flor), Arbol(Rama, Brote), Dirección(Izquierda, Derecha), TipoHambre(Gula, Hambre, Inanicion), Animal, foldArbol, peso, perfume, puedeVivir, mismosComponentes, masPesado, componentesPorNivel, dimensiones, ultimaPrimavera, crecer, comer, alimentar, sobrevivientes) where
 
 data Componente = Madera | Hoja | Fruto | Flor deriving (Eq, Show)
 

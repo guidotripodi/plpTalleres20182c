@@ -3,8 +3,6 @@ import Arboles
 import Test.HUnit
 import Data.List
 
-
-
 --arboles para pruebas:
 maderaSolo = Brote Madera
 arbol1 = Brote Hoja
@@ -38,7 +36,6 @@ protegidoNivel1Derecha = Rama Madera soloUnaHoja protegido
 superProtegido = Rama Hoja protegido protegido
 
 desbalanceado = Rama Fruto (Brote Madera) protegido
-
 
 --Ejecución de los tests
 main :: IO Counts
@@ -119,7 +116,7 @@ testsEj6 = test [
   ]
 
 testsEj7 = test [
-	0 ~=? 0 --Cambiar esto por tests verdaderos.
+	[protegidoNivel1Derecha, superProtegido] ~=? sobrevivientes [(Derecha, 1, Inanicion), (Izquierda, 1, Inanicion)] [protegidoNivel1Derecha, superProtegido, protegido, arbol9]
   ]
 
 testsEj8 = test [
